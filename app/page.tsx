@@ -1,5 +1,6 @@
 import { CheckIcon } from "lucide-react";
 import Image from "next/image";
+import { BillingToggle } from "@/components/copper/billing-toggle";
 import { SiteFooter } from "@/components/copper/site-footer";
 import { SiteHeader } from "@/components/copper/site-header";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,13 @@ import {
   getPrivacySummary,
   getProducts,
 } from "@/lib/copper/catalog";
+
+// What a year of monthly billing costs beyond the annual price, in cents.
+function annualSavingsCents(plan: { monthlyUsd: number; annualUsd: number }) {
+  return (
+    Math.round(plan.monthlyUsd * 100) * 12 - Math.round(plan.annualUsd * 100)
+  );
+}
 
 // Size, alt text and caption for each lifestyle photo, keyed by its catalog path.
 const lifestyleCopy: Record<
@@ -204,15 +212,29 @@ export default function Home() {
                         {plan.name}
                         {isPlus && <Badge>Best value</Badge>}
                       </CardTitle>
-                      <p className="text-3xl font-bold">
-                        {formatUsd(plan.monthlyUsd)}
-                        <span className="text-muted-foreground text-base font-normal">
-                          /month
-                        </span>
-                      </p>
-                      <p className="text-muted-foreground">
-                        {formatUsd(plan.annualUsd)}/year
-                      </p>
+                      {isPlus ? (
+                        <BillingToggle
+                          monthly={formatUsd(plan.monthlyUsd)}
+                          annual={formatUsd(plan.annualUsd)}
+                          savings={
+                            annualSavingsCents(plan) > 0
+                              ? formatUsd(annualSavingsCents(plan) / 100)
+                              : undefined
+                          }
+                        />
+                      ) : (
+                        <>
+                          <p className="text-3xl font-bold">
+                            {formatUsd(plan.monthlyUsd)}
+                            <span className="text-muted-foreground text-base font-normal">
+                              /month
+                            </span>
+                          </p>
+                          <p className="text-muted-foreground">
+                            {formatUsd(plan.annualUsd)}/year
+                          </p>
+                        </>
+                      )}
                     </CardHeader>
                     <CardContent>
                       <ul className="flex flex-col gap-3">
