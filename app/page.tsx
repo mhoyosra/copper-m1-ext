@@ -1,6 +1,6 @@
-import { CheckIcon } from "lucide-react";
 import Image from "next/image";
 import { BillingToggle } from "@/components/copper/billing-toggle";
+import { PrivacyFaq } from "@/components/copper/privacy-faq";
 import { SiteFooter } from "@/components/copper/site-footer";
 import { SiteHeader } from "@/components/copper/site-header";
 import { Badge } from "@/components/ui/badge";
@@ -274,17 +274,7 @@ export default function Home() {
             <p className="mb-8 text-lg">
               Our {privacy.policy} privacy policy, in plain language.
             </p>
-            <ul className="bg-card text-card-foreground flex flex-col gap-4 rounded-xl p-6 md:p-8">
-              {privacy.points.map((point) => (
-                <li key={point} className="flex gap-3">
-                  <CheckIcon
-                    aria-hidden="true"
-                    className="text-accent mt-1 size-5 shrink-0"
-                  />
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
+            <PrivacyFaq points={privacy.points} />
             <p className="mt-6 font-semibold">
               Copper does record requests after you say &quot;
               {privacy.wakeWord}.&quot; The points above explain how they are
